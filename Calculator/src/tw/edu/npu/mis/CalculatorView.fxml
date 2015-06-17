@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane id="gridPane" style="-fx-background-color: #1e1f20;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tw.edu.npu.mis.CalculatorController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" prefWidth="80" />
+        <ColumnConstraints hgrow="ALWAYS" prefWidth="80" />
+        <ColumnConstraints hgrow="ALWAYS" prefWidth="80" />
+        <ColumnConstraints hgrow="ALWAYS" prefWidth="80" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints prefHeight="100" vgrow="ALWAYS" />
+        <RowConstraints prefHeight="60" vgrow="ALWAYS" />
+        <RowConstraints prefHeight="60" vgrow="ALWAYS" />
+        <RowConstraints prefHeight="60" vgrow="ALWAYS" />
+        <RowConstraints prefHeight="60" vgrow="ALWAYS" />
+        <RowConstraints prefHeight="60" vgrow="ALWAYS" />
+        <RowConstraints prefHeight="60" vgrow="ALWAYS" />
+        <RowConstraints prefHeight="60" vgrow="ALWAYS" />
+    </rowConstraints>
+   <children>
+      <Label fx:id="display" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;" text="12345" textFill="WHITE" GridPane.columnIndex="0" GridPane.columnSpan="4">
+         <font>
+            <Font size="48.0" />
+         </font>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </Label>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemClear" style="-fx-background-color: #1e1f20;" text="MC" textFill="#e8e8e8" GridPane.rowIndex="1">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemRecall" style="-fx-background-color: #1e1f20;" text="MR" textFill="#e8e8e8" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemPlus" style="-fx-background-color: #1e1f20;" text="M+" textFill="#e8e8e8" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemMinus" style="-fx-background-color: #1e1f20;" text="M-" textFill="#e8e8e8" GridPane.columnIndex="3" GridPane.rowIndex="1">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemSet" style="-fx-background-color: #1e1f20;" text="MS" textFill="#e8e8e8" GridPane.rowIndex="2">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSqrt" style="-fx-background-color: #1e1f20;" text="√" textFill="#e8e8e8" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handlePercent" style="-fx-background-color: #1e1f20;" text="\%" textFill="#e8e8e8" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleReciprocal" style="-fx-background-color: #1e1f20;" text="1/x" textFill="#e8e8e8" GridPane.columnIndex="3" GridPane.rowIndex="2">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClearEntry" style="-fx-background-color: #1e1f20;" text="CE" textFill="#e8e8e8" GridPane.rowIndex="3">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClear" style="-fx-background-color: #1e1f20;" text="C" textFill="#e8e8e8" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBackspace" style="-fx-background-color: #1e1f20;" text="⌫" textFill="#e8e8e8" GridPane.columnIndex="2" GridPane.rowIndex="3">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOver" style="-fx-background-color: #1e1f20;" text="÷" textFill="#e8e8e8" GridPane.columnIndex="3" GridPane.rowIndex="3">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleTimes" style="-fx-background-color: #1e1f20;" text="×" textFill="#e8e8e8" GridPane.columnIndex="3" GridPane.rowIndex="4">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMinus" style="-fx-background-color: #1e1f20;" text="-" textFill="#e8e8e8" GridPane.columnIndex="3" GridPane.rowIndex="5">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handlePlus" style="-fx-background-color: #1e1f20;" text="+" textFill="#e8e8e8" GridPane.columnIndex="3" GridPane.rowIndex="6">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleEqual" style="-fx-background-color: #1e1f20;" text="=" textFill="#e8e8e8" GridPane.columnIndex="3" GridPane.rowIndex="7">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleDot" style="-fx-background-color: #1e1f20;" text="." textFill="#e8e8e8" GridPane.columnIndex="2" GridPane.rowIndex="7">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handlePlusMinus" style="-fx-background-color: #1e1f20;" text="±" textFill="#e8e8e8" GridPane.rowIndex="7">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber0" style="-fx-background-color: #1e1f20;" text="0" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber1" style="-fx-background-color: #1e1f20;" text="1" textFill="WHITE" GridPane.rowIndex="6">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber2" style="-fx-background-color: #1e1f20;" text="2" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="6">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber3" style="-fx-background-color: #1e1f20;" text="3" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="6">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber4" style="-fx-background-color: #1e1f20;" text="4" textFill="WHITE" GridPane.rowIndex="5">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber5" style="-fx-background-color: #1e1f20;" text="5" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber6" style="-fx-background-color: #1e1f20;" text="6" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber7" style="-fx-background-color: #1e1f20;" text="7" textFill="WHITE" GridPane.rowIndex="4">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber8" style="-fx-background-color: #1e1f20;" text="8" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNumber9" style="-fx-background-color: #1e1f20;" text="9" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Button>
+   </children>
+</GridPane>
