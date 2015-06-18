@@ -231,7 +231,7 @@ public class Calculator extends Observable {
         DecimalFormat fmt = new DecimalFormat("#.########");
         String value = fmt.format(decimal);
         if (value.length() > 10) {
-            fmt = new DecimalFormat("0.######E0");
+            fmt = new DecimalFormat("0.#####E0");
             value = fmt.format(decimal);
         }
         return value;

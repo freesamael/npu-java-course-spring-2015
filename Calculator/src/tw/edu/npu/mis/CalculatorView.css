@@ -13,14 +13,38 @@ and open the template in the editor.
 }
 
 .label {
-    -fx-background-color: inherit;
+    -fx-background-color: black;
     -fx-text-fill: white;
+    -fx-font-size: 42.0;
+    -fx-padding: 24.0;
 }
 
 .button {
     -fx-background-color: inherit;
+    -fx-text-fill: #e8e8e8;
+    -fx-font-size: 24.0;
 }
 
 .button:pressed {
+    -fx-background-color: #3c3d3e;
+}
+
+.alpha-button {
+    -fx-background-color: inherit;
+    -fx-text-fill: #e8e8e8;
+    -fx-font-size: 16.0;
+}
+
+.alpha-button:pressed {
+    -fx-background-color: #3c3d3e;
+}
+
+.digit-button {
+    -fx-background-color: inherit;
+    -fx-text-fill: white;
+    -fx-font-size: 28.0;
+}
+
+.digit-button:pressed {
     -fx-background-color: #3c3d3e;
 }
