@@ -37,6 +37,7 @@ public class CalculatorTest {
     public void tearDown() {
     }
 
+    // TC01
     @Test
     public void testIntegerAdd() {
         assertEquals("0", mSUT.getDisplay());
@@ -47,6 +48,7 @@ public class CalculatorTest {
         assertEquals("5", mSUT.getDisplay());
     }
 
+    // TC02
     @Test
     public void testAccuIntergerAdd() {
         testIntegerAdd();
@@ -62,6 +64,7 @@ public class CalculatorTest {
         assertEquals("20", mSUT.getDisplay());
     }
 
+    // TC03
     @Test
     public void testFloatingAdd() {
         assertEquals("0", mSUT.getDisplay());
@@ -76,6 +79,7 @@ public class CalculatorTest {
         assertEquals("5.5", mSUT.getDisplay());
     }
 
+    // TC04
     @Test
     public void testFloatingAddVerifyAllDisplays() {
         assertEquals("0", mSUT.getDisplay());
@@ -109,6 +113,7 @@ public class CalculatorTest {
         assertEquals("80.03456", mSUT.getDisplay());
     }
 
+    // TC05
     @Test
     public void testIntegerSub() {
         assertEquals("0", mSUT.getDisplay());
@@ -119,6 +124,7 @@ public class CalculatorTest {
         assertEquals("1", mSUT.getDisplay());
     }
 
+    // TC06
     @Test
     public void testAccuIntegerSub() {
         testIntegerSub();
@@ -134,6 +140,7 @@ public class CalculatorTest {
         assertEquals("-9", mSUT.getDisplay());
     }
 
+    // TC07
     @Test
     public void testIntergerSubNegResult() {
         assertEquals("0", mSUT.getDisplay());
@@ -144,6 +151,7 @@ public class CalculatorTest {
         assertEquals("-1", mSUT.getDisplay());
     }
 
+    // TC08
     @Test
     public void testFloatingSub() {
         assertEquals("0", mSUT.getDisplay());
@@ -156,6 +164,7 @@ public class CalculatorTest {
         assertEquals("2.5", mSUT.getDisplay());
     }
 
+    // TC09
     @Test
     public void testFloatingSubPrecision() {
         assertEquals("0", mSUT.getDisplay());
@@ -170,6 +179,7 @@ public class CalculatorTest {
         assertEquals("1.1", mSUT.getDisplay());
     }
 
+    // TC10
     @Test
     public void testFloatingSubNegResult() {
         assertEquals("0", mSUT.getDisplay());
@@ -182,6 +192,7 @@ public class CalculatorTest {
         assertEquals("-2.5", mSUT.getDisplay());
     }
 
+    // TC11
     @Test
     public void testFloatingSubPrecisionNegResult() {
         assertEquals("0", mSUT.getDisplay());
@@ -196,6 +207,7 @@ public class CalculatorTest {
         assertEquals("-1.1", mSUT.getDisplay());
     }
 
+    // TC12
     @Test
     public void testFloatingSubVerifyAllDisplays() {
         assertEquals("0", mSUT.getDisplay());
@@ -229,6 +241,7 @@ public class CalculatorTest {
         assertEquals("-6.43456", mSUT.getDisplay());
     }
 
+    // TC13
     @Test
     public void testIntegerMul() {
         assertEquals("0", mSUT.getDisplay());
@@ -239,6 +252,7 @@ public class CalculatorTest {
         assertEquals("6", mSUT.getDisplay());
     }
 
+    // TC14
     @Test
     public void testAccuIntegerMul() {
         testIntegerMul();
@@ -254,6 +268,7 @@ public class CalculatorTest {
         assertEquals("1458", mSUT.getDisplay());
     }
 
+    // TC15
     @Test
     public void testFloatingMul() {
         assertEquals("0", mSUT.getDisplay());
@@ -268,6 +283,7 @@ public class CalculatorTest {
         assertEquals("7.26", mSUT.getDisplay());
     }
 
+    // TC16
     @Test
     public void testFloatingMulVerifyAllDisplays() {
         assertEquals("0", mSUT.getDisplay());
@@ -293,6 +309,7 @@ public class CalculatorTest {
         assertEquals("1589.76", mSUT.getDisplay());
     }
 
+    // TC17
     @Test
     public void testIntegerDiv() {
         assertEquals("0", mSUT.getDisplay());
@@ -304,6 +321,7 @@ public class CalculatorTest {
         assertEquals("32", mSUT.getDisplay());
     }
 
+    // TC18
     @Test
     public void testAccuIntegerDiv() {
         testIntegerDiv();
@@ -319,6 +337,7 @@ public class CalculatorTest {
         assertEquals("1", mSUT.getDisplay());
     }
 
+    // TC19
     @Test
     public void testFloatingDiv() {
         assertEquals("0", mSUT.getDisplay());
@@ -330,6 +349,7 @@ public class CalculatorTest {
         assertEquals("0.125", mSUT.getDisplay());
     }
 
+    // TC20
     @Test
     public void testFloatingDivVerifyAllDisplays() {
         assertEquals("0", mSUT.getDisplay());
@@ -345,6 +365,7 @@ public class CalculatorTest {
         assertEquals("0.125", mSUT.getDisplay());
     }
 
+    // TC21
     @Test
     public void testPlusMinus() {
         assertEquals("0", mSUT.getDisplay());
@@ -356,6 +377,7 @@ public class CalculatorTest {
         assertEquals("-18", mSUT.getDisplay());
     }
 
+    // TC22
     @Test
     public void testBasicArithmetic() {
         assertEquals("0", mSUT.getDisplay());
@@ -385,6 +407,7 @@ public class CalculatorTest {
         assertEquals("-14.25", mSUT.getDisplay());
     }
 
+    // TC23
     @Test
     public void testBackspace() {
         assertEquals("0", mSUT.getDisplay());
@@ -422,6 +445,7 @@ public class CalculatorTest {
         assertEquals("698.2", mSUT.getDisplay());
     }
 
+    // TC24
     @Test
     public void testClearEntry() {
         assertEquals("0", mSUT.getDisplay());
@@ -445,6 +469,7 @@ public class CalculatorTest {
         assertEquals("75", mSUT.getDisplay());
     }
 
+    // TC25
     @Test
     public void testClear() {
         assertEquals("0", mSUT.getDisplay());
@@ -468,6 +493,7 @@ public class CalculatorTest {
         assertEquals("25", mSUT.getDisplay());
     }
 
+    // TC26
     @Test
     public void testReciprocal() {
         assertEquals("0", mSUT.getDisplay());
@@ -476,13 +502,14 @@ public class CalculatorTest {
         assertEquals("0.2", mSUT.getDisplay());
     }
 
+    // TC27
     @Test
     public void testReciprocalAdd() {
         assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(5);
         mSUT.performOperation(Calculator.Operator.RECIPROCAL);
-        mSUT.performOperation(Calculator.Operator.PLUS);
         assertEquals("0.2", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.PLUS);
         mSUT.appendDigit(8);
         mSUT.performOperation(Calculator.Operator.RECIPROCAL);
         assertEquals("0.125", mSUT.getDisplay());
@@ -490,6 +517,7 @@ public class CalculatorTest {
         assertEquals("0.325", mSUT.getDisplay());
     }
 
+    // TC28
     @Test
     public void testSqrt() {
         assertEquals("0", mSUT.getDisplay());
@@ -498,6 +526,7 @@ public class CalculatorTest {
         assertEquals("3", mSUT.getDisplay());
     }
 
+    // TC29
     @Test
     public void testSqrtAdd() {
         assertEquals("0", mSUT.getDisplay());
@@ -513,6 +542,7 @@ public class CalculatorTest {
         assertEquals("7", mSUT.getDisplay());
     }
 
+    // TC30
     @Test
     public void testPercent() {
         assertEquals("0", mSUT.getDisplay());
@@ -522,6 +552,7 @@ public class CalculatorTest {
         assertEquals("0.6", mSUT.getDisplay());
     }
 
+    // TC31
     @Test
     public void testPercentAdd() {
         assertEquals("0", mSUT.getDisplay());
@@ -535,6 +566,7 @@ public class CalculatorTest {
         assertEquals("63", mSUT.getDisplay());
     }
 
+    // TC32
     @Test
     public void testMemSetClearRecall() {
         assertEquals("0", mSUT.getDisplay());
@@ -549,6 +581,7 @@ public class CalculatorTest {
         assertEquals("0", mSUT.getDisplay());
     }
 
+    // TC33
     @Test
     public void testMemSetClearRecallAfterArithmetic() {
         testBasicArithmetic();
@@ -561,6 +594,7 @@ public class CalculatorTest {
         assertEquals("0", mSUT.getDisplay());
     }
 
+    // TC34
     @Test
     public void testMemPlusMinus() {
         assertEquals("0", mSUT.getDisplay());
@@ -576,6 +610,7 @@ public class CalculatorTest {
         assertEquals("2", mSUT.getDisplay());
     }
 
+    // TC35
     @Test
     public void testMemPlusMinusAfterArithmetic() {
         testIntegerAdd();
