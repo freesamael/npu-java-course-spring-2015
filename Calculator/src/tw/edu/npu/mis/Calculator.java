@@ -53,11 +53,13 @@ public class Calculator extends Observable {
     private State mState;
     private String mOperatedValue;
     private String mOperatingValue;
+    private String mMemoryValue;
     private String mErrorMessage;
     private Operator mOperator;
 
     public Calculator() {
         performClear();
+        performMemoryClear();
     }
 
     /**
@@ -136,28 +138,47 @@ public class Calculator extends Observable {
         mErrorMessage = null;
         if (operator == Operator.EQUAL) {
             performEqual();
-        } else if (operator == Operator.PLUS_MINUS
-                || operator == Operator.RECIPROCAL
-                || operator == Operator.SQRT) {
-            performUniOperation(operator);
-        } else if (operator == Operator.PERCENT){
-            performPercent();
         } else if (operator == Operator.BACKSPACE) {
             performBackspace();
         } else if (operator == Operator.CLEAR_ENTRY) {
             performClearEntry();
         } else if (operator == Operator.CLEAR) {
             performClear();
+        } else if (operator == Operator.PLUS_MINUS
+                || operator == Operator.RECIPROCAL
+                || operator == Operator.SQRT) {
+            performUniOperation(operator);
+        } else if (operator == Operator.PERCENT) {
+            performPercent();
+        } else if (operator == Operator.MEM_SET
+                || operator == Operator.MEM_PLUS
+                || operator == Operator.MEM_MINUS) {
+            performMemoryUpdate(operator);
+        } else if (operator == Operator.MEM_RECALL) {
+            performMemoryRecall();
+        } else if (operator == Operator.MEM_CLEAR) {
+            performMemoryClear();
         } else /* general operators */ {
-            if (mState == State.INPUT_OPERATING_VALUE) {
-                calculateResult();
-            }
-            mState = State.INPUT_OPERATOR;
-            mOperator = operator;
-            setChanged();
+            performGeneralOperation(operator);
         }
 
         notifyObservers();
+    }
+
+    /**
+     * Get the display for current calculation.
+     *
+     * @return A string to display.
+     */
+    public String getDisplay() {
+        if (mErrorMessage != null) {
+            return mErrorMessage;
+        }
+
+        if (mState == State.INPUT_OPERATING_VALUE) {
+            return mOperatingValue;
+        }
+        return mOperatedValue;
     }
 
     /**
@@ -170,6 +191,50 @@ public class Calculator extends Observable {
         mState = State.OUTPUT_RESULT;
         calculateResult();
         setChanged();
+    }
+
+    /**
+     * Make actual calculation.
+     */
+    private void calculateResult() {
+        double operatedValue = Double.parseDouble(mOperatedValue);
+        double operatingValue = Double.parseDouble(mOperatingValue);
+        Double result = null;
+
+        if (mOperator == Operator.PLUS) {
+            result = operatedValue + operatingValue;
+        } else if (mOperator == Operator.MINUS) {
+            result = operatedValue - operatingValue;
+        } else if (mOperator == Operator.TIMES) {
+            result = operatedValue * operatingValue;
+        } else if (mOperator == Operator.OVER) {
+            if (operatingValue == 0) {
+                mErrorMessage = "Error";
+                mOperatedValue = mOperatingValue = "0";
+            } else {
+                result = operatedValue / operatingValue;
+            }
+        }
+
+        if (result != null) {
+            mOperatedValue = formatDecimal(result);
+        }
+    }
+
+    /**
+     * Format decimal for better display.
+     *
+     * @param decimal Decimal number to format.
+     * @return Formated string.
+     */
+    private String formatDecimal(double decimal) {
+        DecimalFormat fmt = new DecimalFormat("#.########");
+        String value = fmt.format(decimal);
+        if (value.length() > 10) {
+            fmt = new DecimalFormat("0.######E0");
+            value = fmt.format(decimal);
+        }
+        return value;
     }
 
     /**
@@ -291,62 +356,77 @@ public class Calculator extends Observable {
     }
 
     /**
-     * Make actual calculation.
+     * Perform a memory update operation (M+, M-, MS).
+     *
+     * @param op Operation to perform. Must be a memory operation.
      */
-    private void calculateResult() {
-        double operatedValue = Double.parseDouble(mOperatedValue);
-        double operatingValue = Double.parseDouble(mOperatingValue);
-        Double result = null;
-
-        if (mOperator == Operator.PLUS) {
-            result = operatedValue + operatingValue;
-        } else if (mOperator == Operator.MINUS) {
-            result = operatedValue - operatingValue;
-        } else if (mOperator == Operator.TIMES) {
-            result = operatedValue * operatingValue;
-        } else if (mOperator == Operator.OVER) {
-            if (operatingValue == 0) {
-                mErrorMessage = "Error";
-                mOperatedValue = mOperatingValue = "0";
-            } else {
-                result = operatedValue / operatingValue;
-            }
+    private void performMemoryUpdate(Operator op) {
+        if (mState == State.OUTPUT_RESULT
+                || mState == State.INPUT_OPERATED_VALUE) {
+            memoryUpdate(Double.parseDouble(mOperatedValue), op);
+        } else /* mState == State.INPUT_OPERATOR
+         || mState == State.INPUT_OPERATING_VALUE */ {
+            memoryUpdate(Double.parseDouble(mOperatingValue), op);
         }
+        mState = State.OUTPUT_RESULT;
+    }
 
-        if (result != null) {
-            mOperatedValue = formatDecimal(result);
+    /**
+     * Update memory by given input and operation.
+     *
+     * @param input Input to perform operation with.
+     * @param op Operation to perform. Must be a memory operation.
+     */
+    private void memoryUpdate(double input, Operator op) {
+        switch (op) {
+            case MEM_SET:
+                mMemoryValue = formatDecimal(input);
+                break;
+            case MEM_PLUS:
+                mMemoryValue = formatDecimal(
+                        Double.parseDouble(mMemoryValue) + input);
+                break;
+            case MEM_MINUS:
+                mMemoryValue = formatDecimal(
+                        Double.parseDouble(mMemoryValue) - input);
+                break;
+            default:
+                throw new UnsupportedOperationException("Invalid operator: " + op);
         }
     }
 
     /**
-     * Format decimal for better display.
-     *
-     * @param decimal Decimal number to format.
-     * @return Formated string.
+     * Clear memory value.
      */
-    private String formatDecimal(double decimal) {
-        DecimalFormat fmt = new DecimalFormat("#.########");
-        String value = fmt.format(decimal);
-        if (value.length() > 10) {
-            fmt = new DecimalFormat("0.######E0");
-            value = fmt.format(decimal);
-        }
-        return value;
+    private void performMemoryClear() {
+        mMemoryValue = "0";
     }
 
     /**
-     * Get the display for current calculation.
-     *
-     * @return A string to display.
+     * Recall memory value.
      */
-    public String getDisplay() {
-        if (mErrorMessage != null) {
-            return mErrorMessage;
+    private void performMemoryRecall() {
+        if (mState == State.OUTPUT_RESULT
+                || mState == State.INPUT_OPERATED_VALUE) {
+            mState = State.INPUT_OPERATED_VALUE;
+            mOperatedValue = mMemoryValue;
+        } else /* mState == State.INPUT_OPERATOR
+         || mState == State.INPUT_OPERATING_VALUE */ {
+            mState = State.INPUT_OPERATING_VALUE;
+            mOperatingValue = mMemoryValue;
         }
+        setChanged();
+    }
 
+    /**
+     * Perform a general operation such as +, -, x, /, ..., etc.
+     */
+    private void performGeneralOperation(Operator op) {
         if (mState == State.INPUT_OPERATING_VALUE) {
-            return mOperatingValue;
+            calculateResult();
+            setChanged();
         }
-        return mOperatedValue;
+        mState = State.INPUT_OPERATOR;
+        mOperator = op;
     }
 }
