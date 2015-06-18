@@ -45,16 +45,18 @@ public class Calculator extends Observable {
     private enum State {
 
         INPUT_OPERATED_VALUE,
+        INPUT_OPERATED_VALUE_FINAL,
         INPUT_OPERATOR,
         INPUT_OPERATING_VALUE,
-        OUTPUT_RESULT
+        INPUT_OPERATING_VALUE_FINAL,
+        OUTPUT_RESULT,
+        ERROR
     }
 
     private State mState;
     private String mOperatedValue;
     private String mOperatingValue;
     private String mMemoryValue;
-    private String mErrorMessage;
     private Operator mOperator;
 
     public Calculator() {
@@ -72,7 +74,6 @@ public class Calculator extends Observable {
             throw new IllegalArgumentException("Invalid 'digit' value: " + digit);
         }
 
-        mErrorMessage = null;
         if (mState == State.INPUT_OPERATED_VALUE
                 && mOperatedValue.length() < MAX_INPUT_LENGTH) {
             if ("0".equals(mOperatedValue)) {
@@ -81,7 +82,8 @@ public class Calculator extends Observable {
                 mOperatedValue += String.valueOf(digit);
             }
             setChanged();
-        } else if (mState == State.INPUT_OPERATOR) {
+        } else if (mState == State.INPUT_OPERATOR
+                || mState == State.INPUT_OPERATING_VALUE_FINAL) {
             mState = State.INPUT_OPERATING_VALUE;
             mOperatingValue = String.valueOf(digit);
             setChanged();
@@ -93,7 +95,9 @@ public class Calculator extends Observable {
                 mOperatingValue += String.valueOf(digit);
             }
             setChanged();
-        } else if (mState == State.OUTPUT_RESULT) {
+        } else if (mState == State.OUTPUT_RESULT
+                || mState == State.INPUT_OPERATED_VALUE_FINAL
+                || mState == State.ERROR) {
             mState = State.INPUT_OPERATED_VALUE;
             mOperatedValue = String.valueOf(digit);
             mOperatingValue = "0";
@@ -107,12 +111,12 @@ public class Calculator extends Observable {
      * Append a dot to the calculation.
      */
     public void appendDot() {
-        mErrorMessage = null;
         if (mState == State.INPUT_OPERATED_VALUE
                 && !mOperatedValue.contains(".")) {
             mOperatedValue += ".";
             setChanged();
-        } else if (mState == State.INPUT_OPERATOR) {
+        } else if (mState == State.INPUT_OPERATOR
+                || mState == State.INPUT_OPERATING_VALUE_FINAL) {
             mState = State.INPUT_OPERATING_VALUE;
             mOperatingValue = "0.";
             setChanged();
@@ -120,7 +124,9 @@ public class Calculator extends Observable {
                 && !mOperatingValue.contains(".")) {
             mOperatingValue += ".";
             setChanged();
-        } else if (mState == State.OUTPUT_RESULT) {
+        } else if (mState == State.OUTPUT_RESULT
+                || mState == State.INPUT_OPERATED_VALUE_FINAL
+                || mState == State.ERROR) {
             mState = State.INPUT_OPERATED_VALUE;
             mOperatedValue = "0.";
             setChanged();
@@ -135,7 +141,6 @@ public class Calculator extends Observable {
      * @param operator Operator to perform.
      */
     public void performOperation(Operator operator) {
-        mErrorMessage = null;
         if (operator == Operator.EQUAL) {
             performEqual();
         } else if (operator == Operator.BACKSPACE) {
@@ -171,13 +176,15 @@ public class Calculator extends Observable {
      * @return A string to display.
      */
     public String getDisplay() {
-        if (mErrorMessage != null) {
-            return mErrorMessage;
+        if (mState == State.ERROR) {
+            return "Error";
         }
 
-        if (mState == State.INPUT_OPERATING_VALUE) {
+        if (mState == State.INPUT_OPERATING_VALUE
+                || mState == State.INPUT_OPERATING_VALUE_FINAL) {
             return mOperatingValue;
         }
+
         return mOperatedValue;
     }
 
@@ -197,8 +204,20 @@ public class Calculator extends Observable {
      * Make actual calculation.
      */
     private void calculateResult() {
-        double operatedValue = Double.parseDouble(mOperatedValue);
-        double operatingValue = Double.parseDouble(mOperatingValue);
+        double operatedValue;
+        try {
+            operatedValue = Double.parseDouble(mOperatedValue);
+        } catch (NumberFormatException e) {
+            operatedValue = 0;
+        }
+
+        double operatingValue;
+        try {
+            operatingValue = Double.parseDouble(mOperatingValue);
+        } catch (NumberFormatException e) {
+            operatingValue = 0;
+        }
+
         Double result = null;
 
         if (mOperator == Operator.PLUS) {
@@ -209,7 +228,7 @@ public class Calculator extends Observable {
             result = operatedValue * operatingValue;
         } else if (mOperator == Operator.OVER) {
             if (operatingValue == 0) {
-                mErrorMessage = "Error";
+                mState = State.ERROR;
                 mOperatedValue = mOperatingValue = "0";
             } else {
                 result = operatedValue / operatingValue;
@@ -246,15 +265,17 @@ public class Calculator extends Observable {
     private void performUniOperation(Operator op) {
         if (!"0".equals(mOperatedValue)
                 && (mState == State.OUTPUT_RESULT
-                || mState == State.INPUT_OPERATED_VALUE)) {
-            mState = State.INPUT_OPERATED_VALUE;
+                || mState == State.INPUT_OPERATED_VALUE
+                || mState == State.INPUT_OPERATED_VALUE_FINAL)) {
+            mState = State.INPUT_OPERATED_VALUE_FINAL;
             mOperatedValue = formatDecimal(
                     uniOperation(Double.parseDouble(mOperatedValue), op));
             setChanged();
         } else if (!"0".equals(mOperatingValue)
                 && (mState == State.INPUT_OPERATOR
-                || mState == State.INPUT_OPERATING_VALUE)) {
-            mState = State.INPUT_OPERATING_VALUE;
+                || mState == State.INPUT_OPERATING_VALUE
+                || mState == State.INPUT_OPERATING_VALUE_FINAL)) {
+            mState = State.INPUT_OPERATING_VALUE_FINAL;
             mOperatingValue = formatDecimal(
                     uniOperation(Double.parseDouble(mOperatingValue), op));
             setChanged();
@@ -287,15 +308,17 @@ public class Calculator extends Observable {
     private void performPercent() {
         if (!"0".equals(mOperatedValue)
                 && (mState == State.OUTPUT_RESULT
-                || mState == State.INPUT_OPERATED_VALUE)) {
-            mState = State.INPUT_OPERATED_VALUE;
+                || mState == State.INPUT_OPERATED_VALUE
+                || mState == State.INPUT_OPERATED_VALUE_FINAL)) {
+            mState = State.INPUT_OPERATED_VALUE_FINAL;
             mOperatedValue = formatDecimal(
                     Double.parseDouble(mOperatedValue) / 100);
             setChanged();
         } else if (!"0".equals(mOperatingValue)
                 && (mState == State.INPUT_OPERATOR
-                || mState == State.INPUT_OPERATING_VALUE)) {
-            mState = State.INPUT_OPERATING_VALUE;
+                || mState == State.INPUT_OPERATING_VALUE
+                || mState == State.INPUT_OPERATING_VALUE_FINAL)) {
+            mState = State.INPUT_OPERATING_VALUE_FINAL;
             mOperatingValue = formatDecimal(Double.parseDouble(mOperatedValue)
                     * Double.parseDouble(mOperatingValue) / 100);
             setChanged();
@@ -315,8 +338,9 @@ public class Calculator extends Observable {
             } else {
                 mOperatedValue = "0";
             }
-        } else /* mState == State.INPUT_OPERATOR
-         || mState == State.INPUT_OPERATING_VALUE */ {
+            setChanged();
+        } else if (mState == State.INPUT_OPERATOR
+                || mState == State.INPUT_OPERATING_VALUE) {
             mState = State.INPUT_OPERATING_VALUE;
             if (mOperatingValue.length() > 1) {
                 mOperatingValue = mOperatingValue
@@ -324,8 +348,9 @@ public class Calculator extends Observable {
             } else {
                 mOperatingValue = "0";
             }
+            setChanged();
         }
-        setChanged();
+
     }
 
     /**
@@ -333,11 +358,13 @@ public class Calculator extends Observable {
      */
     private void performClearEntry() {
         if (mState == State.OUTPUT_RESULT
-                || mState == State.INPUT_OPERATED_VALUE) {
+                || mState == State.INPUT_OPERATED_VALUE
+                || mState == State.INPUT_OPERATED_VALUE_FINAL) {
             mState = State.INPUT_OPERATED_VALUE;
             mOperatedValue = "0";
         } else /* mState == State.INPUT_OPERATOR
-         || mState == State.INPUT_OPERATING_VALUE */ {
+         || mState == State.INPUT_OPERATING_VALUE
+         || mState == State.INPUT_OPERATING_VALUE_FINAL*/ {
             mState = State.INPUT_OPERATING_VALUE;
             mOperatingValue = "0";
         }
@@ -348,7 +375,6 @@ public class Calculator extends Observable {
      * Clear the calculation.
      */
     private void performClear() {
-        mErrorMessage = null;
         mState = State.OUTPUT_RESULT;
         mOperator = null;
         mOperatedValue = mOperatingValue = "0";
@@ -362,10 +388,12 @@ public class Calculator extends Observable {
      */
     private void performMemoryUpdate(Operator op) {
         if (mState == State.OUTPUT_RESULT
-                || mState == State.INPUT_OPERATED_VALUE) {
+                || mState == State.INPUT_OPERATED_VALUE
+                || mState == State.INPUT_OPERATED_VALUE_FINAL) {
             memoryUpdate(Double.parseDouble(mOperatedValue), op);
         } else /* mState == State.INPUT_OPERATOR
-         || mState == State.INPUT_OPERATING_VALUE */ {
+         || mState == State.INPUT_OPERATING_VALUE
+         || mState == State.INPUT_OPERATING_VALUE_FINAL */ {
             memoryUpdate(Double.parseDouble(mOperatingValue), op);
         }
         mState = State.OUTPUT_RESULT;
@@ -407,12 +435,14 @@ public class Calculator extends Observable {
      */
     private void performMemoryRecall() {
         if (mState == State.OUTPUT_RESULT
-                || mState == State.INPUT_OPERATED_VALUE) {
-            mState = State.INPUT_OPERATED_VALUE;
+                || mState == State.INPUT_OPERATED_VALUE
+                || mState == State.INPUT_OPERATED_VALUE_FINAL) {
+            mState = State.INPUT_OPERATED_VALUE_FINAL;
             mOperatedValue = mMemoryValue;
         } else /* mState == State.INPUT_OPERATOR
-         || mState == State.INPUT_OPERATING_VALUE */ {
-            mState = State.INPUT_OPERATING_VALUE;
+         || mState == State.INPUT_OPERATING_VALUE
+         || mState == State.INPUT_OPERATING_VALUE_MEM_RECALL */ {
+            mState = State.INPUT_OPERATING_VALUE_FINAL;
             mOperatingValue = mMemoryValue;
         }
         setChanged();
@@ -422,7 +452,8 @@ public class Calculator extends Observable {
      * Perform a general operation such as +, -, x, /, ..., etc.
      */
     private void performGeneralOperation(Operator op) {
-        if (mState == State.INPUT_OPERATING_VALUE) {
+        if (mState == State.INPUT_OPERATING_VALUE
+                || mState == State.INPUT_OPERATING_VALUE_FINAL) {
             calculateResult();
             setChanged();
         }

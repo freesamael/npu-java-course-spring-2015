@@ -534,4 +534,63 @@ public class CalculatorTest {
         mSUT.performOperation(Calculator.Operator.EQUAL);
         assertEquals("63", mSUT.getDisplay());
     }
+
+    @Test
+    public void testMemSetClearRecall() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(6);
+        mSUT.appendDigit(5);
+        mSUT.performOperation(Calculator.Operator.MEM_SET);
+        mSUT.performOperation(Calculator.Operator.CLEAR_ENTRY);
+        mSUT.performOperation(Calculator.Operator.MEM_RECALL);
+        assertEquals("65", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.MEM_CLEAR);
+        mSUT.performOperation(Calculator.Operator.MEM_RECALL);
+        assertEquals("0", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testMemSetClearRecallAfterArithmetic() {
+        testBasicArithmetic();
+        mSUT.performOperation(Calculator.Operator.MEM_SET);
+        mSUT.performOperation(Calculator.Operator.CLEAR_ENTRY);
+        mSUT.performOperation(Calculator.Operator.MEM_RECALL);
+        assertEquals("-14.25", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.MEM_CLEAR);
+        mSUT.performOperation(Calculator.Operator.MEM_RECALL);
+        assertEquals("0", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testMemPlusMinus() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(6);
+        mSUT.performOperation(Calculator.Operator.MEM_PLUS);
+        mSUT.appendDigit(4);
+        mSUT.performOperation(Calculator.Operator.MEM_PLUS);
+        mSUT.performOperation(Calculator.Operator.MEM_RECALL);
+        assertEquals("10", mSUT.getDisplay());
+        mSUT.appendDigit(8);
+        mSUT.performOperation(Calculator.Operator.MEM_MINUS);
+        mSUT.performOperation(Calculator.Operator.MEM_RECALL);
+        assertEquals("2", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testMemPlusMinusAfterArithmetic() {
+        testIntegerAdd();
+        mSUT.performOperation(Calculator.Operator.MEM_PLUS);
+        mSUT.performOperation(Calculator.Operator.CLEAR_ENTRY);
+        testIntegerSub();
+        mSUT.performOperation(Calculator.Operator.MEM_PLUS);
+        mSUT.performOperation(Calculator.Operator.CLEAR_ENTRY);
+        testIntegerMul();
+        mSUT.performOperation(Calculator.Operator.MEM_MINUS);
+        mSUT.performOperation(Calculator.Operator.CLEAR_ENTRY);
+        testIntegerDiv();
+        mSUT.performOperation(Calculator.Operator.MEM_MINUS);
+        mSUT.performOperation(Calculator.Operator.CLEAR_ENTRY);
+        mSUT.performOperation(Calculator.Operator.MEM_RECALL);
+        assertEquals("-32", mSUT.getDisplay());
+    }
 }
