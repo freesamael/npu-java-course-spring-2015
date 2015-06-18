@@ -18,23 +18,23 @@ public class Calculator extends Observable {
      */
     public enum Operator {
 
-        CLEAR, // C
-        CLEAR_ENTRY, // CE
-        BACKSPACE, // ⌫
-        EQUAL, // =
-        PLUS, // +
-        MINUS, // -
-        TIMES, // ×
-        OVER, // ⁄
-        PLUS_MINUS, // ±
-        RECIPROCAL, // 1/x
-        PERCENT, // %
-        SQRT, // √
-        MEM_CLEAR, // MC
-        MEM_SET, // MS
-        MEM_PLUS, // M+
-        MEM_MINUS, // M-
-        MEM_RECALL   // MR
+        CLEAR,
+        CLEAR_ENTRY,
+        BACKSPACE,
+        EQUAL,
+        PLUS,
+        MINUS,
+        TIMES,
+        OVER,
+        PLUS_MINUS,
+        RECIPROCAL,
+        PERCENT,
+        SQRT,
+        MEM_CLEAR,
+        MEM_SET,
+        MEM_PLUS,
+        MEM_MINUS,
+        MEM_RECALL
     }
 
     /**

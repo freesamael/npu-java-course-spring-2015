@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  *
  * @author Samael Wang <freesamael@gmail.com>
  */
-public class CalculatorIT {
+public class CalculatorTest {
 
     private Calculator mSUT;
 
@@ -39,6 +39,7 @@ public class CalculatorIT {
 
     @Test
     public void testIntegerAdd() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(2);
         mSUT.performOperation(Calculator.Operator.PLUS);
         mSUT.appendDigit(3);
@@ -47,7 +48,23 @@ public class CalculatorIT {
     }
 
     @Test
+    public void testAccuIntergerAdd() {
+        testIntegerAdd();
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("8", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("11", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("14", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("17", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("20", mSUT.getDisplay());
+    }
+
+    @Test
     public void testFloatingAdd() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(2);
         mSUT.appendDot();
         mSUT.appendDigit(2);
@@ -61,6 +78,7 @@ public class CalculatorIT {
 
     @Test
     public void testFloatingAddVerifyAllDisplays() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(3);
         assertEquals("3", mSUT.getDisplay());
         mSUT.appendDigit(6);
@@ -93,15 +111,32 @@ public class CalculatorIT {
 
     @Test
     public void testIntegerSub() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(3);
         mSUT.performOperation(Calculator.Operator.MINUS);
         mSUT.appendDigit(2);
         mSUT.performOperation(Calculator.Operator.EQUAL);
         assertEquals("1", mSUT.getDisplay());
     }
+    
+    @Test
+    public void testAccuIntegerSub() {
+        testIntegerSub();
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("-1", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("-3", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("-5", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("-7", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("-9", mSUT.getDisplay());
+    }
 
     @Test
     public void testIntergerSubNegResult() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(2);
         mSUT.performOperation(Calculator.Operator.MINUS);
         mSUT.appendDigit(3);
@@ -111,6 +146,19 @@ public class CalculatorIT {
 
     @Test
     public void testFloatingSub() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(5);
+        mSUT.performOperation(Calculator.Operator.MINUS);
+        mSUT.appendDigit(2);
+        mSUT.appendDot();
+        mSUT.appendDigit(5);
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("2.5", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testFloatingSubPrecision() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(3);
         mSUT.appendDot();
         mSUT.appendDigit(3);
@@ -124,6 +172,19 @@ public class CalculatorIT {
 
     @Test
     public void testFloatingSubNegResult() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(2);
+        mSUT.appendDot();
+        mSUT.appendDigit(5);
+        mSUT.performOperation(Calculator.Operator.MINUS);
+        mSUT.appendDigit(5);
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("-2.5", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testFloatingSubPrecisionNegResult() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(2);
         mSUT.appendDot();
         mSUT.appendDigit(2);
@@ -137,6 +198,7 @@ public class CalculatorIT {
 
     @Test
     public void testFloatingSubVerifyAllDisplays() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(3);
         assertEquals("3", mSUT.getDisplay());
         mSUT.appendDigit(6);
@@ -169,15 +231,32 @@ public class CalculatorIT {
 
     @Test
     public void testIntegerMul() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(2);
         mSUT.performOperation(Calculator.Operator.TIMES);
         mSUT.appendDigit(3);
         mSUT.performOperation(Calculator.Operator.EQUAL);
         assertEquals("6", mSUT.getDisplay());
     }
+    
+    @Test
+    public void testAccuIntegerMul() {
+        testIntegerMul();
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("18", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("54", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("162", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("486", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("1458", mSUT.getDisplay());
+    }
 
     @Test
     public void testFloatingMul() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(3);
         mSUT.appendDot();
         mSUT.appendDigit(3);
@@ -191,6 +270,7 @@ public class CalculatorIT {
 
     @Test
     public void testFloatingMulVerifyAllDisplays() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(3);
         assertEquals("3", mSUT.getDisplay());
         mSUT.appendDigit(6);
@@ -215,15 +295,33 @@ public class CalculatorIT {
 
     @Test
     public void testIntegerDiv() {
-        mSUT.appendDigit(9);
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(6);
+        mSUT.appendDigit(4);
         mSUT.performOperation(Calculator.Operator.OVER);
-        mSUT.appendDigit(3);
+        mSUT.appendDigit(2);
         mSUT.performOperation(Calculator.Operator.EQUAL);
-        assertEquals("3", mSUT.getDisplay());
+        assertEquals("32", mSUT.getDisplay());
     }
     
     @Test
+    public void testAccuIntegerDiv() {
+        testIntegerDiv();
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("16", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("8", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("4", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("2", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("1", mSUT.getDisplay());
+    }
+
+    @Test
     public void testFloatingDiv() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(2);
         mSUT.performOperation(Calculator.Operator.OVER);
         mSUT.appendDigit(1);
@@ -231,9 +329,10 @@ public class CalculatorIT {
         mSUT.performOperation(Calculator.Operator.EQUAL);
         assertEquals("0.125", mSUT.getDisplay());
     }
-    
+
     @Test
     public void testFloatingDivVerifyAllDisplays() {
+        assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(2);
         assertEquals("2", mSUT.getDisplay());
         mSUT.performOperation(Calculator.Operator.OVER);
@@ -244,5 +343,88 @@ public class CalculatorIT {
         assertEquals("16", mSUT.getDisplay());
         mSUT.performOperation(Calculator.Operator.EQUAL);
         assertEquals("0.125", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testBackspace() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(3);
+        assertEquals("3", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.BACKSPACE);
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(6);
+        assertEquals("6", mSUT.getDisplay());
+        mSUT.appendDigit(8);
+        assertEquals("68", mSUT.getDisplay());
+        mSUT.appendDigit(7);
+        assertEquals("687", mSUT.getDisplay());
+        mSUT.appendDigit(9);
+        assertEquals("6879", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.BACKSPACE);
+        assertEquals("687", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.BACKSPACE);
+        assertEquals("68", mSUT.getDisplay());
+        mSUT.appendDigit(9);
+        assertEquals("689", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.PLUS);
+        assertEquals("689", mSUT.getDisplay());
+        mSUT.appendDigit(9);
+        assertEquals("9", mSUT.getDisplay());
+        mSUT.appendDot();
+        assertEquals("9.", mSUT.getDisplay());
+        mSUT.appendDigit(6);
+        assertEquals("9.6", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.BACKSPACE);
+        assertEquals("9.", mSUT.getDisplay());
+        mSUT.appendDigit(2);
+        assertEquals("9.2", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("698.2", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testClearEntry() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(5);
+        assertEquals("5", mSUT.getDisplay());
+        mSUT.appendDigit(0);
+        assertEquals("50", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.PLUS);
+        assertEquals("50", mSUT.getDisplay());
+        mSUT.appendDigit(5);
+        assertEquals("5", mSUT.getDisplay());
+        mSUT.appendDigit(0);
+        assertEquals("50", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.CLEAR_ENTRY);
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(2);
+        assertEquals("2", mSUT.getDisplay());
+        mSUT.appendDigit(5);
+        assertEquals("25", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("75", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testClear() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(5);
+        assertEquals("5", mSUT.getDisplay());
+        mSUT.appendDigit(0);
+        assertEquals("50", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.PLUS);
+        assertEquals("50", mSUT.getDisplay());
+        mSUT.appendDigit(5);
+        assertEquals("5", mSUT.getDisplay());
+        mSUT.appendDigit(0);
+        assertEquals("50", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.CLEAR);
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(2);
+        assertEquals("2", mSUT.getDisplay());
+        mSUT.appendDigit(5);
+        assertEquals("25", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("25", mSUT.getDisplay());
     }
 }
