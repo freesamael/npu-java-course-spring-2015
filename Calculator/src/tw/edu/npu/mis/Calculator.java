@@ -135,8 +135,10 @@ public class Calculator extends Observable {
         mErrorMessage = null;
         if (operator == Operator.EQUAL) {
             performEqual();
-        } else if (operator == Operator.PLUS_MINUS) {
-            performPlusMinus();
+        } else if (operator == Operator.PLUS_MINUS
+                || operator == Operator.RECIPROCAL
+                || operator == Operator.SQRT) {
+            performUniOperation(operator);
         } else if (operator == Operator.BACKSPACE) {
             performBackspace();
         } else if (operator == Operator.CLEAR_ENTRY) {
@@ -168,28 +170,46 @@ public class Calculator extends Observable {
     }
 
     /**
-     * Change the positive / negative sign.
+     * Make uni-operations (i.e. plus-minus, reciprocal, sqrt) on current input.
+     *
+     * @param op Operator to perform. Must be an uni-operation.
      */
-    private void performPlusMinus() {
-        if (mState == State.INPUT_OPERATED_VALUE
-                && !"0".equals(mOperatedValue)) {
-            mOperatedValue = formatDecimal(
-                    Double.parseDouble(mOperatedValue) * -1);
-        } else if (mState == State.INPUT_OPERATOR
-                && !"0".equals(mOperatedValue)) {
-            mState = State.INPUT_OPERATING_VALUE;
-            mOperatingValue = formatDecimal(
-                    Double.parseDouble(mOperatedValue) * -1);
-        } else if (mState == State.INPUT_OPERATING_VALUE
-                && !"0".equals(mOperatingValue)) {
-            mOperatingValue = formatDecimal(
-                    Double.parseDouble(mOperatingValue) * -1);
-        } else if (!"0".equals(mOperatedValue)) /* OUTPUT_RESULT */ {
+    private void performUniOperation(Operator op) {
+        if (!"0".equals(mOperatedValue)
+                && (mState == State.OUTPUT_RESULT
+                || mState == State.INPUT_OPERATED_VALUE)) {
             mState = State.INPUT_OPERATED_VALUE;
             mOperatedValue = formatDecimal(
-                    Double.parseDouble(mOperatedValue) * -1);
+                    uniOperation(Double.parseDouble(mOperatedValue), op));
+            setChanged();
+        } else if (!"0".equals(mOperatingValue)
+                && (mState == State.INPUT_OPERATOR
+                || mState == State.INPUT_OPERATING_VALUE)) {
+            mState = State.INPUT_OPERATING_VALUE;
+            mOperatingValue = formatDecimal(
+                    uniOperation(Double.parseDouble(mOperatingValue), op));
+            setChanged();
         }
-        setChanged();
+    }
+
+    /**
+     * Do an uni-operation (plus-minus, reciprocal or sqrt) on the input.
+     *
+     * @param input Input to calculate. Must not be 0.
+     * @param op Operator to perform. Must be an uni-operation.
+     * @return Calculation result.
+     */
+    private double uniOperation(double input, Operator op) {
+        switch (op) {
+            case PLUS_MINUS:
+                return input * -1;
+            case RECIPROCAL:
+                return 1 / input;
+            case SQRT:
+                return Math.sqrt(input);
+            default:
+                throw new UnsupportedOperationException("Invalid operator: " + op);
+        }
     }
 
     /**
@@ -205,9 +225,8 @@ public class Calculator extends Observable {
             } else {
                 mOperatedValue = "0";
             }
-            setChanged();
-        } else if (mState == State.INPUT_OPERATOR
-                || mState == State.INPUT_OPERATING_VALUE) {
+        } else /* mState == State.INPUT_OPERATOR
+         || mState == State.INPUT_OPERATING_VALUE */ {
             mState = State.INPUT_OPERATING_VALUE;
             if (mOperatingValue.length() > 1) {
                 mOperatingValue = mOperatingValue
@@ -215,8 +234,8 @@ public class Calculator extends Observable {
             } else {
                 mOperatingValue = "0";
             }
-            setChanged();
         }
+        setChanged();
     }
 
     /**
@@ -227,8 +246,8 @@ public class Calculator extends Observable {
                 || mState == State.INPUT_OPERATED_VALUE) {
             mState = State.INPUT_OPERATED_VALUE;
             mOperatedValue = "0";
-        } else if (mState == State.INPUT_OPERATOR
-                || mState == State.INPUT_OPERATING_VALUE) {
+        } else /* mState == State.INPUT_OPERATOR
+         || mState == State.INPUT_OPERATING_VALUE */ {
             mState = State.INPUT_OPERATING_VALUE;
             mOperatingValue = "0";
         }
