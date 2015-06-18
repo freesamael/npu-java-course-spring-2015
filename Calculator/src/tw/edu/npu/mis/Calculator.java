@@ -13,6 +13,8 @@ import java.util.Observable;
  */
 public class Calculator extends Observable {
 
+    public static final int MAX_INPUT_LENGTH = 10;
+
     /**
      * The available operators of the calculator.
      */
@@ -40,7 +42,7 @@ public class Calculator extends Observable {
     /**
      * The internal state of the calculator.
      */
-    public enum State {
+    private enum State {
 
         INPUT_OPERATED_VALUE,
         INPUT_OPERATOR,
@@ -48,7 +50,6 @@ public class Calculator extends Observable {
         OUTPUT_RESULT
     }
 
-    public static final int MAX_INPUT_LENGTH = 10;
     private State mState;
     private String mOperatedValue;
     private String mOperatingValue;
@@ -139,6 +140,8 @@ public class Calculator extends Observable {
                 || operator == Operator.RECIPROCAL
                 || operator == Operator.SQRT) {
             performUniOperation(operator);
+        } else if (operator == Operator.PERCENT){
+            performPercent();
         } else if (operator == Operator.BACKSPACE) {
             performBackspace();
         } else if (operator == Operator.CLEAR_ENTRY) {
@@ -170,7 +173,8 @@ public class Calculator extends Observable {
     }
 
     /**
-     * Make uni-operations (i.e. plus-minus, reciprocal, sqrt) on current input.
+     * Perform an uni-operation (i.e. plus-minus, reciprocal, sqrt) on current
+     * input.
      *
      * @param op Operator to perform. Must be an uni-operation.
      */
@@ -209,6 +213,27 @@ public class Calculator extends Observable {
                 return Math.sqrt(input);
             default:
                 throw new UnsupportedOperationException("Invalid operator: " + op);
+        }
+    }
+
+    /**
+     * Get the percentage of current input.
+     */
+    private void performPercent() {
+        if (!"0".equals(mOperatedValue)
+                && (mState == State.OUTPUT_RESULT
+                || mState == State.INPUT_OPERATED_VALUE)) {
+            mState = State.INPUT_OPERATED_VALUE;
+            mOperatedValue = formatDecimal(
+                    Double.parseDouble(mOperatedValue) / 100);
+            setChanged();
+        } else if (!"0".equals(mOperatingValue)
+                && (mState == State.INPUT_OPERATOR
+                || mState == State.INPUT_OPERATING_VALUE)) {
+            mState = State.INPUT_OPERATING_VALUE;
+            mOperatingValue = formatDecimal(Double.parseDouble(mOperatedValue)
+                    * Double.parseDouble(mOperatingValue) / 100);
+            setChanged();
         }
     }
 

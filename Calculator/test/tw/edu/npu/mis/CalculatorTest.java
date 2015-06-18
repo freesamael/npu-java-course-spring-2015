@@ -482,8 +482,10 @@ public class CalculatorTest {
         mSUT.appendDigit(5);
         mSUT.performOperation(Calculator.Operator.RECIPROCAL);
         mSUT.performOperation(Calculator.Operator.PLUS);
+        assertEquals("0.2", mSUT.getDisplay());
         mSUT.appendDigit(8);
         mSUT.performOperation(Calculator.Operator.RECIPROCAL);
+        assertEquals("0.125", mSUT.getDisplay());
         mSUT.performOperation(Calculator.Operator.EQUAL);
         assertEquals("0.325", mSUT.getDisplay());
     }
@@ -501,11 +503,35 @@ public class CalculatorTest {
         assertEquals("0", mSUT.getDisplay());
         mSUT.appendDigit(9);
         mSUT.performOperation(Calculator.Operator.SQRT);
+        assertEquals("3", mSUT.getDisplay());
         mSUT.performOperation(Calculator.Operator.PLUS);
         mSUT.appendDigit(1);
         mSUT.appendDigit(6);
         mSUT.performOperation(Calculator.Operator.SQRT);
+        assertEquals("4", mSUT.getDisplay());
         mSUT.performOperation(Calculator.Operator.EQUAL);
         assertEquals("7", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testPercent() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(6);
+        mSUT.appendDigit(0);
+        mSUT.performOperation(Calculator.Operator.PERCENT);
+        assertEquals("0.6", mSUT.getDisplay());
+    }
+
+    @Test
+    public void testPercentAdd() {
+        assertEquals("0", mSUT.getDisplay());
+        mSUT.appendDigit(6);
+        mSUT.appendDigit(0);
+        mSUT.performOperation(Calculator.Operator.PLUS);
+        mSUT.appendDigit(5);
+        mSUT.performOperation(Calculator.Operator.PERCENT);
+        assertEquals("3", mSUT.getDisplay());
+        mSUT.performOperation(Calculator.Operator.EQUAL);
+        assertEquals("63", mSUT.getDisplay());
     }
 }
